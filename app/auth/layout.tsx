@@ -1,4 +1,5 @@
 import Logo from "@/components/ui/Logo";
+import ToastNotification from "@/components/ui/ToastNotification";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
       </div>
+      <ToastNotification />
     </>
   );
 }
