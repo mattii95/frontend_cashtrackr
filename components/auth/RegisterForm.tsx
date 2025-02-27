@@ -1,25 +1,37 @@
 'use client'
 
+import { ChangeEvent, useActionState, useEffect, useRef, useState } from "react"
 import { register } from "@/actions/create-account-action"
-import { useActionState, useEffect, useRef } from "react"
 import ErrorMessage from "../ui/ErrorMessage";
 import SuccessMessage from "../ui/SuccessMessage";
 
 export default function RegisterForm() {
+  const initialValues = {
+    email: '',
+    name: '',
+    password: '',
+    password_confirmation: '',
+  }
+
   const ref = useRef<HTMLFormElement>(null);
   const [state, dispatch] = useActionState(register, {
     errors: [],
     success: '',
   });
 
+  const [formData, setFormData] = useState(initialValues);
+
   useEffect(() => {
     if (state.success) {
-      ref.current?.reset()
+      ref.current?.reset();
+      setFormData(initialValues);
     }
 
   }, [state])
 
-
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
 
   return (
     <form
@@ -45,6 +57,8 @@ export default function RegisterForm() {
           placeholder="Email de Registro"
           className="w-full border border-gray-300 p-3 rounded-lg"
           name="email"
+          value={formData.email}
+          onChange={handleChange}
         />
       </div>
 
@@ -57,6 +71,8 @@ export default function RegisterForm() {
           placeholder="Nombre de Registro"
           className="w-full border border-gray-300 p-3 rounded-lg"
           name="name"
+          value={formData.name}
+          onChange={handleChange}
         />
       </div>
 
@@ -69,6 +85,9 @@ export default function RegisterForm() {
           placeholder="Password de Registro"
           className="w-full border border-gray-300 p-3 rounded-lg"
           name="password"
+          autoComplete="off"
+          value={formData.password}
+          onChange={handleChange}
         />
       </div>
 
@@ -82,6 +101,9 @@ export default function RegisterForm() {
           placeholder="Repite Password de Registro"
           className="w-full border border-gray-300 p-3 rounded-lg"
           name="password_confirmation"
+          autoComplete="off"
+          value={formData.password_confirmation}
+          onChange={handleChange}
         />
       </div>
 
