@@ -1,10 +1,36 @@
 'use client'
+import React, { ChangeEvent, useActionState, useEffect, useState } from "react"
+import { authenticate } from "@/actions/authenticate-user-action"
+import { toast } from "react-toastify";
 
 export default function LoginForm() {
+  const [state, dispatch] = useActionState(authenticate, {
+    errors: []
+  });
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  useEffect(() => {
+    if (state.errors) {
+      state.errors.forEach(error => {
+        toast.error(error);
+      });
+    }
+
+  }, [state])
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
 
   return (
     <>
       <form
+        method="POST"
+        action={dispatch}
         className="mt-14 space-y-5"
         noValidate
       >
@@ -19,6 +45,8 @@ export default function LoginForm() {
             placeholder="Email de Registro"
             className="w-full border border-gray-300 p-3 rounded-lg"
             name="email"
+            value={formData.email}
+            onChange={handleChange}
           />
         </div>
 
@@ -32,6 +60,8 @@ export default function LoginForm() {
             placeholder="Password de Registro"
             className="w-full border border-gray-300 p-3 rounded-lg"
             name="password"
+            value={formData.password}
+            onChange={handleChange}
           />
         </div>
 
