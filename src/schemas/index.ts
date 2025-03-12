@@ -46,9 +46,42 @@ export const UserSchema = z.object({
   email: z.string().email()
 });
 
-export type User = z.infer<typeof UserSchema>;
+
 
 export const SuccessSchema = z.string();
 export const ErrorResponseSchema = z.object({
   error: z.string(),
 });
+
+
+// Budgets
+export const DraftBudgetSchema = z.object({
+  name: z.string()
+    .min(1, { message: 'El Nombre del presupuesto es obligatorio' }),
+  amount: z.coerce.
+    number({ message: 'Cantidad no válida' })
+    .min(1, { message: 'Cantidad no válida' }),
+})
+
+export const BudgetAPIResponseSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  amount: z.string(),
+  userId: z.number(),
+  createdAt: z.string(),
+  updatedAt: z.string()
+})
+
+export const BudgetsAPIResponseSchema = z.array(BudgetAPIResponseSchema);
+
+
+// Types
+export type User = z.infer<typeof UserSchema>;
+export type Budget = z.infer<typeof BudgetAPIResponseSchema>;
+
+
+// Formularios
+export type BudgetFormValues = {
+  name: string,
+  amount: string
+}
